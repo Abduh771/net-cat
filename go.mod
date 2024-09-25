@@ -1,3 +1,3 @@
-module netcat
+module main
 
-go 1.22.3
+go 1.23
