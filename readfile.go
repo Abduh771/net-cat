@@ -15,9 +15,10 @@ func prevMessage() string {
 
 func isValidName(name string) bool {
 	for i := 0; i < len(name); i++ {
-		if name[i] > 32 {
-			return true
+		if name[i] < 33 || name[i] > 126 { // Check if the character is outside printable ASCII range
+			return false
 		}
 	}
-	return false
+	return len(name) > 0 // Ensure the name is not empty
 }
+
