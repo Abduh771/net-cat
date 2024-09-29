@@ -85,7 +85,7 @@ func handleMessages(conn net.Conn, clientAddr, name string) {
 
         message, err := reader.ReadString('\n')
         if err != nil {
-            WriteToClients(" has left our chat...\n", clientAddr, false)
+            WriteToClients(" has left our chat...", clientAddr, false)
             Status()
             clientsMutex.Lock()
             delete(clients, clientAddr)
