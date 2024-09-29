@@ -1,8 +1,9 @@
-package main
+package src
 
 import (
 	"fmt"
 	"net"
+	"os"
 	"sync"
 	"time"
 )
@@ -17,36 +18,33 @@ var (
 	clientsMutex sync.Mutex                // Mutex to synchronize access to clients map
 )
 
-func geneateMessage(name string) string {
+func GenerateMessage(name string) string {
 	now := time.Now()
 	formattedTime := now.Format("2006-01-02 15:04:05")
 	return "[" + formattedTime + "]" + "[" + name + "]" + ":"
 }
 
-func writeToClients(message string, clientAddr string, bl bool) {
+func WriteToClients(message string, clientAddr string, bl bool) {
 	if bl {
-		message = "\n" + geneateMessage(clients[clientAddr].Name) + message
-		SaveToFile("prevMessages.txt", message[1:])
+		message = "\n" + GenerateMessage(clients[clientAddr].Name) + message
+		SaveToFile("data/prevMessages.txt", message[1:])
 	} else {
 		message = "\n" + clients[clientAddr].Name + message
-		SaveToFile("logs.txt", geneateMessage("Client Name: "+clients[clientAddr].Name+" || Client Adress "+clientAddr)+message[1:])
+		SaveToFile("data/logs.txt", GenerateMessage("Client Name: "+clients[clientAddr].Name+" || Client Address "+clientAddr)+message[1:])
 	}
 
-	
-	loopAll(message, clientAddr)
+	LoopAll(message, clientAddr)
 }
 
 func Status() {
 	for i, j := range clients {
 		if j.Name != "" {
-			j.Conn.Write([]byte(geneateMessage(clients[i].Name)))
+			j.Conn.Write([]byte(GenerateMessage(clients[i].Name)))
 		}
 	}
 }
 
-// Function to handle each client connection
-
-func loopAll(message, clientAddr string) {
+func LoopAll(message, clientAddr string) {
 	for i, j := range clients {
 		if i != clientAddr {
 			if j.Name != "" {
@@ -56,8 +54,8 @@ func loopAll(message, clientAddr string) {
 	}
 }
 
-// Function to display all connected clients
-func listClients() {
+// ListClients displays all connected clients
+func ListClients() {
 	clientsMutex.Lock()
 	defer clientsMutex.Unlock()
 
@@ -65,4 +63,10 @@ func listClients() {
 	for addr := range clients {
 		fmt.Println(addr)
 	}
+}
+
+func SaveToFile(name, message string) {
+	file, _ := os.OpenFile(name, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	defer file.Close()
+	file.WriteString(message)
 }

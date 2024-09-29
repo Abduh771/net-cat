@@ -4,32 +4,20 @@ import (
 	"fmt"
 	"net"
 	"os"
-	"strconv"
 	"time"
+	"netcat/src"
 )
 
 func main() {
-	port := ":8989"
-	if len(os.Args) == 2 {
-		_, e := strconv.Atoi(os.Args[1])
-		if e == nil {
-			port = ":" + os.Args[1]
-		} else {
-			fmt.Println("[USAGE]: ./TCPChat $port")
-			return
-		}
-	} else if len(os.Args) > 2 {
-		fmt.Println("[USAGE]: ./TCPChat $port")
-		return
-	}
+	port := src.CheckPort()
 
-	// turncate the prev message file
-	file, _ := os.OpenFile("prevMessages.txt", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0o644)
+	// truncate the prev message file
+	file, _ := os.OpenFile("data/prevMessages.txt", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 	file.Truncate(0)
-	///save start of new chat with time
+	// save start of new chat with time
 	now := time.Now()
 	formattedTime := now.Format("2006-01-02 15:04:05")
-	SaveToFile("logs.txt", "------------------------new chat started at ["+formattedTime+"]--------------------------------\n\n\n")
+	src.SaveToFile("data/logs.txt", "------------------------new chat started at ["+formattedTime+"]--------------------------------\n\n\n")
 
 	// Start TCP server
 	listener, err := net.Listen("tcp", port)
@@ -49,7 +37,7 @@ func main() {
 				fmt.Println("Error accepting connection:", err)
 				continue
 			}
-			go handleClient(conn)
+			go src.HandleClient(conn)
 		}
 	}()
 
@@ -58,7 +46,7 @@ func main() {
 		var input string
 		fmt.Scanln(&input)
 		if input == "list" {
-			listClients() // List clients when the "list" command is entered
+			src.ListClients() // List clients when the "list" command is entered
 		}
 	}
 }
