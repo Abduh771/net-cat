@@ -20,8 +20,11 @@ func HandleClient(conn net.Conn) {
 
 	name := requestClientName(conn, clientAddr)
 
-	WriteToClients(" has joined our chat...\n", clientAddr, false)
-	clients[clientAddr].Conn.Write([]byte(prevMessage()))
+	// Only write to clients if the name is valid
+	if name != "" {
+		WriteToClients(" has joined our chat...", clientAddr, false)
+		clients[clientAddr].Conn.Write([]byte(prevMessage()))
+	}
 
 	handleMessages(conn, clientAddr, name)
 }
@@ -54,14 +57,11 @@ func requestClientName(conn net.Conn, clientAddr string) string {
 		if err != nil {
 			return ""
 		}
-
 		name = strings.TrimSpace(inputName)
-
 		if !IsPrintable(name) {
 			conn.Write([]byte("Invalid name: Please use only printable characters.\n"))
 			continue
 		}
-
 		clientsMutex.Lock()
 		if isValidName(name, existingNames) && !isNameTaken(name) {
 			clients[clientAddr] = Client{Conn: conn, Name: name}
@@ -77,7 +77,6 @@ func requestClientName(conn net.Conn, clientAddr string) string {
 func handleMessages(conn net.Conn, clientAddr, name string) {
     reader := bufio.NewReader(conn)
     showStatus := true
-
     for {
         if showStatus {
             Status()
@@ -101,7 +100,6 @@ func handleMessages(conn net.Conn, clientAddr, name string) {
         }
 
         if len(message) == 0 {
-            // If the message is empty, show the user's prompt without sending anything to others
             conn.Write([]byte(GenerateMessage(name))) // Show only the user's prompt
             showStatus = false
         } else {

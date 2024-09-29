@@ -25,15 +25,15 @@ func GenerateMessage(name string) string {
 }
 
 func WriteToClients(message string, clientAddr string, bl bool) {
-	if bl {
-		message = "\n" + GenerateMessage(clients[clientAddr].Name) + message
-		SaveToFile("data/prevMessages.txt", message[1:])
-	} else {
-		message = "\n" + clients[clientAddr].Name + message
-		SaveToFile("data/logs.txt", GenerateMessage("Client Name: "+clients[clientAddr].Name+" || Client Address "+clientAddr)+message[1:])
-	}
+    if bl {
+        message = "\n" + GenerateMessage(clients[clientAddr].Name) + message + "\n" // Add newline at the end
+        SaveToFile("data/prevMessages.txt", message[1:]) // Remove leading newline for saving
+    } else {
+        message = "\n" + clients[clientAddr].Name + message + "\n" // Add newline at the end
+        SaveToFile("data/logs.txt", GenerateMessage("Client Name: "+clients[clientAddr].Name+" || Client Address "+clientAddr)+message[1:]) // Remove leading newline for saving
+    }
 
-	LoopAll(message, clientAddr)
+    LoopAll(message, clientAddr)
 }
 
 func Status() {
