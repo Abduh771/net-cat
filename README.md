@@ -12,7 +12,7 @@ Default port: 8989
 Installation
 Ensure Go (v1.22.3+) is installed.
 Clone the repository:
-git clone https://github.com/Abduh771/net-cat.git
+git clone https://learn.zone01oujda.ma/git/asoudri/net-cat.git
 
 ### Project Structure
 <pre>
