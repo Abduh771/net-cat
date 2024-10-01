@@ -15,7 +15,7 @@ Clone the repository:
 git clone https://learn.zone01oujda.ma/git/asoudri/net-cat.git
 
 ### Project Structure
-<pre>
+```
 ├── go.mod                   # Go module file
 ├── main.go                  # Main server file
 ├── data/                    # Data files
@@ -26,4 +26,4 @@ git clone https://learn.zone01oujda.ma/git/asoudri/net-cat.git
     ├── checkport.go         # Port checks
     ├── getmessages.go       # Fetches/saves messages
     └── handleclients.go     # Manages client interactions
-<pre>
+```
