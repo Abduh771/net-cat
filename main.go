@@ -5,7 +5,7 @@ import (
 	"net"
 	"os"
 	"time"
-	"netcat/src" // Assuming you have the src package
+	"netcat/src" 
 )
 
 // Truncate the prevMessages file and prepare it for a new chat
@@ -65,9 +65,8 @@ func listClientsOnCommand() {
 }
 
 func main() {
-	port := src.CheckPort() // Validate and set the port
+	port := src.CheckPort()
 
-	// Truncate previous messages and log new chat start
 	truncatePrevMessages()
 	saveChatStartTime()
 
@@ -78,9 +77,7 @@ func main() {
 	}
 	defer listener.Close()
 
-	// Accept connections in a separate goroutine
 	go acceptConnections(listener)
 
-	// Periodically list connected clients based on command
 	listClientsOnCommand()
 }

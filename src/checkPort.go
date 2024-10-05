@@ -11,7 +11,7 @@ func atoi(s string) int {
 		if c < '0' || c > '9' { 
 			return 0 
 		}
-		result = result*10 + int(c-'0') // Convert character to int and build the number
+		result = result*10 + int(c-'0') 
 	}
 	return result
 }
@@ -30,5 +30,5 @@ func CheckPort() string {
 		fmt.Println("[USAGE]: ./TCPChat $port")
 		os.Exit(1)
 	}
-	return port // Return the validated port
+	return port
 }
